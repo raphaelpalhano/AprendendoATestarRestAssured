@@ -10,7 +10,28 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-public class LeitorJSON {
+
+/**
+ * @author Raphael Angel
+ * @version 0.1
+ *
+ *
+ * <h1>Manipulador de JSON</h1>
+ *
+ *
+ * <h3>Métodos que a classe possui</h3>
+ * <ul>
+ *     <li>
+ *         <p>getJSONBody: recebe um argumento (String pathDoJson)
+ *         e devolve o JSON inteiro em formato string em uma linha
+ *         </p>
+ *
+ *     </li>
+ * </ul>
+ *
+ */
+
+public class ManipulationJSON {
     JSONParser leitor;
     JSONObject jsonObjct;
 
