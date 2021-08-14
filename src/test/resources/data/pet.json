@@ -1,0 +1,18 @@
+{
+  "id": 0,
+  "category": {
+    "id": 1,
+    "name": "cachorro"
+  },
+  "name": "Baily",
+  "photoUrls": [
+    "string"
+  ],
+  "tags": [
+    {
+      "id": 2021,
+      "name": "TRASS"
+    }
+  ],
+  "status": "available"
+}
