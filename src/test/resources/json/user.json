@@ -1,0 +1,19 @@
+[
+  {
+    "id": 0,
+    "username": "raphael123",
+    "firstName": "Raphael",
+    "lastName": "Angel",
+    "email": "raphael12@hotmail.com",
+    "password": "coca123",
+    "phone": "48995352712",
+    "userStatus": [
+      {
+        "ruim": 0,
+        "medio": 1,
+        "bom": 2,
+        "otimo": 3
+      }
+    ]
+  }
+]
