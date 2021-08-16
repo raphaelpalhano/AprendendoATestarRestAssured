@@ -3,7 +3,6 @@ package br.com.treinandoComRestAssured.petstoreTest;
 
 import br.com.treinandoComRestAssured.util.ManipulationJSON;
 import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
 import static io.restassured.RestAssured.given;
@@ -17,15 +16,20 @@ public class PetStore {
 
     // path do json que vou enviar para o request
     String pathJson = "src/test/resources/json/pet.json";
-
+    String pathJosn2 = "src/test/resources/json/petAlteracao.json";
     // referência de classe que lê objetos JSON
-    ManipulationJSON manipuladorJson;
-    public static String jsonBody;
+    private static ManipulationJSON jsonOrigin;
+    private static ManipulationJSON jsonAlteration;
+    private static String jsonBody;
+    private static String jsonBodyAlteration;
 
     @BeforeMethod
     public void setup(){
-        manipuladorJson = new  ManipulationJSON(pathJson);
-       jsonBody = manipuladorJson.getJSONBodyObject();
+        jsonOrigin = new  ManipulationJSON(pathJson);
+       jsonBody = jsonOrigin.getJSONBodyObject();
+       jsonAlteration = new ManipulationJSON(pathJosn2);
+       jsonBodyAlteration = jsonAlteration.getJSONBodyObject();
+
     }
 
     // utilizando a anotação @Test do TestNg
@@ -55,40 +59,63 @@ public class PetStore {
                 .body("name", is("Baily"))
                 .body("status", is("available"))
                 .body("id", is(27041938))
-                .body("tags.name", contains(manipuladorJson.getValueObjectJson("tags", 0, "name")))
-                .body("tags.id", contains(manipuladorJson.getValueObjectJson("tags", 0, "id")))
-
+                .body("tags.name", contains("TRASS"))
+                .body("tags.id", contains(2021))
       ;
-
-
-
-
     }
 
-    @Test(dependsOnMethods = "request_Post_New_Pet")
+    @Test(dependsOnMethods = "request_Put_Pet")
     public void request_Get_Verification_Pet(){
         String token =
                 given()
                 .contentType("application/json")
                 .log().all()
         .when()
-                .get(this.URI + "/" + manipuladorJson.getKeyObject("id"))
+                .get(this.URI + "/" + jsonOrigin.getKeyObject("id"))
 
         .then()
                 .log().all()
                 .statusCode(200)
-                .body("category.name", is(manipuladorJson.getValueObjectIntoObject("category", "name")))
-                .body("category.id", is(manipuladorJson.getValueObjectIntoObject("category", "id")))
+                .body("category.name", is("ADD31123FFDCKC20CAX"))
+                .body("category.id", is(1))
+                .body("status", is("sold"))
         .extract().path("category.name")
 
         ;
         System.out.println("O Token de acesso é " + token);
 
-
     }
 
 
+    @Test(dependsOnMethods = "request_Post_New_Pet")
+    public void request_Put_Pet(){
 
+        given()
+                .contentType("application/json").log().all()
+                .body(jsonBodyAlteration)
+        .when()
+                .put(URI)
+        .then()
+                .log().all().statusCode(200)
+                .body("status", is("sold"))
+                ;
+    }
 
+    @Test(dependsOnMethods = "request_Get_Verification_Pet")
+    public void request_Delete_Pet(){
+
+        given()
+                .contentType("application/json")
+                .log().all()
+        .when()
+                .delete(URI + "/" + jsonOrigin.getKeyObject("id"))
+
+        .then().log().all().statusCode(200)
+                .body("code", is(200))
+                .body("message", is("27041938"))
+                .body("type", is("unknown"))
+        ;
+
+    }
 
 }
